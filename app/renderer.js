@@ -9,6 +9,7 @@ const munchFilename = document.querySelector('#munch-filename');
 const viewFile = document.querySelector('#view-file');
 
 let munchFolder = '';
+let preMunchAction = '';
 let munchAction = '';
 
 selectMunchFile.addEventListener('click', (e) => {
@@ -16,7 +17,7 @@ selectMunchFile.addEventListener('click', (e) => {
     return;
   }
 
-  munchAction = 'munch';
+  preMunchAction = 'munch';
   inputFile.click();
 });
 
@@ -25,7 +26,7 @@ selectUnmunchFile.addEventListener('click', (e) => {
     return;
   }
 
-  munchAction = 'unmunch';
+  preMunchAction = 'unmunch';
   inputFile.click();
 });
 
@@ -33,7 +34,9 @@ inputFile.addEventListener('change', () => {
   const filePath = inputFile.files[0].path;
   console.log(filePath);
   munchFolder = path.dirname(filePath);
-  munchFilename.textContent = `${munchAction}ing ${path.basename(filePath)}...`;
+  munchFilename.textContent = path.basename(filePath);
+  inputFile.value = '';
+  munchAction = preMunchAction;
 
   document.querySelectorAll('.action').forEach((el) => {
     el.textContent = munchAction;
