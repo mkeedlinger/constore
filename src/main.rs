@@ -3,7 +3,7 @@ use rug::Float;
 use std::fs;
 use std::io::Write;
 
-const MAGIC_HEADER: &str = "constore:";
+const MAGIC_HEADER: &str = "constore\x1F";
 
 fn run() {
     let mut cli = App::new("Constore")
