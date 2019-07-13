@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>constore</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1 class="heading">constore 📜</h1>
+
+    <div class="container">
+      <input type="file" id="munch-input-file" hidden />
+
+      <button id="select-munch-file">Munch a file</button>
+      <button id="select-unmunch-file">Unmunch a file</button>
+
+      <div class="munch-state munch-state-loading">
+        <h2 id="munch-filename"></h2>
+        <div class="spinner"></div>
+      </div>
+
+      <div class="munch-state munch-state-success">
+        <h2>Successfully <span class="action"></span>ed!</h2>
+        <button id="view-file">
+          View <span class="action"></span>ed file
+        </button>
+      </div>
+
+      <div class="munch-state munch-state-failure">
+        <h2>Could not <span class="action"></span>!</h2>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
