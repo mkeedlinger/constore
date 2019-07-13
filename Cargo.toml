@@ -1,0 +1,12 @@
+[package]
+name = "constore"
+version = "0.1.0"
+authors = ["Michael Edlinger <mkeedlinger@mke.sh>", "Jesse Smick <janka102@gmail.com"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = "2.33.0"
+rug = "1.5.1"
+bimap = "0.3.1"
