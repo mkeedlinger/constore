@@ -63,3 +63,12 @@ fn encode_byte(byte: u8, map: &BiMap<u8, u8>) -> u8 {
 
     out_byte
 }
+
+fn decode_byte(byte: u8, map: &BiMap<u8, u8>) -> u8 {
+    let nibble = byte & 7;
+    let out_byte = map.get_by_left(&nibble).unwrap();
+    let nibble = (byte & (7 << 4)) >> 4;
+    let out_byte = out_byte | (*map.get_by_left(&nibble).unwrap() << 4);
+
+    out_byte
+}
