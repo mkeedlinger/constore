@@ -1,7 +1,7 @@
 use clap::{App, Arg};
 use rug::Float;
 use std::fs;
-use std::io::Write;
+use std::io::{Write, BufReader, BufWriter, Read};
 
 const MAGIC_HEADER: &str = "constore\x1F";
 
@@ -41,24 +41,22 @@ fn main() {
 }
 
 fn encode_file(input_file_path: String, encode_vec: &Vec<u8>) {
-    let input_bytes = fs::read(&input_file_path).unwrap();
+    let input_bytes = fs::File::open(&input_file_path).unwrap();
+    let input_bytes = BufReader::new(input_bytes);
 
     let mut output_file = fs::File::create(&format!("{}.constore", input_file_path)).unwrap();
 
     output_file
         .write_all(&format!("{}{: >32}", MAGIC_HEADER, "sqrt(157)").into_bytes())
         .unwrap();
+    let mut output_file = BufWriter::new(output_file);
 
-    let mut output_vec: Vec<u8> = vec![];
-
-    for (i, byte) in input_bytes.iter().enumerate() {
+    for (i, byte) in input_bytes.bytes().enumerate() {
         if i % 1_000_000 == 0 {
             eprintln!("encoded {: >3}mb", i / 1_000_000);
         }
-        output_vec.push(code_byte(*byte, &encode_vec));
+        output_file.write(&[code_byte(byte.unwrap(), &encode_vec)]).unwrap();
     }
-
-    output_file.write_all(&output_vec).unwrap();
 }
 
 fn decode_file(input_file_path: String, decode_vec: &Vec<u8>) {
