@@ -9,4 +9,3 @@ edition = "2018"
 [dependencies]
 clap = "2.33.0"
 rug = "1.5.1"
-bimap = "0.3.1"

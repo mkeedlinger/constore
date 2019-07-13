@@ -1,4 +1,3 @@
-use bimap::BiMap;
 use clap::{App, Arg};
 use rug::Float;
 use std::fs;
@@ -9,7 +8,7 @@ fn run() {
         .arg(Arg::with_name("file").index(1))
         .get_matches();
 
-    let byte_map = compute_byte_map();
+    let (encode_vec, _decode_vec) = compute_byte_map();
 
     let input_file_path = cli.value_of("file").unwrap();
 
@@ -28,7 +27,7 @@ fn run() {
         if i % 1_000_000 == 0 {
             eprintln!("got to {}", i);
         }
-        output_vec.push(encode_byte(*byte, &byte_map));
+        output_vec.push(code_byte(*byte, &encode_vec));
     }
     output_file.write_all(&output_vec).unwrap();
 }
@@ -37,7 +36,7 @@ fn main() {
     run();
 }
 
-fn compute_byte_map() -> BiMap<u8, u8> {
+fn compute_byte_map() -> (Vec<u8>, Vec<u8>) {
     let n = 157.0;
     let chunk_size = 4;
 
@@ -47,7 +46,8 @@ fn compute_byte_map() -> BiMap<u8, u8> {
 
     // println!("{} {}", digits, n);
 
-    let mut chunks = BiMap::new();
+    let mut encode_chunks: Vec<u8> = vec![0; 16];
+    let mut decode_chunks: Vec<u8> = vec![];
 
     for i in 0..=(digits.len() - chunk_size) {
         let chunk = &digits[i..(i + chunk_size)];
@@ -56,7 +56,7 @@ fn compute_byte_map() -> BiMap<u8, u8> {
         // println!("{} {:0>8b}", chunk, nib);
         // assert!(chunk == format!("{:0>8b}", nib));
 
-        chunks.insert(i as u8, nib);
+        decode_chunks.push(nib);
 
         // if chunks.len() >= max_set_size {
         //     // println!("{:<10} {}", n, i + chunk_size);
@@ -64,23 +64,19 @@ fn compute_byte_map() -> BiMap<u8, u8> {
         //     break;
         // }
     }
-    chunks
+
+    for (i, nib) in decode_chunks.iter().enumerate() {
+        encode_chunks[*nib as usize] = i as u8;
+    }
+
+    (encode_chunks, decode_chunks)
 }
 
-fn encode_byte(byte: u8, map: &BiMap<u8, u8>) -> u8 {
+fn code_byte(byte: u8, code_vec: &Vec<u8>) -> u8 {
     let nibble = byte & 7;
-    let out_byte = map.get_by_right(&nibble).unwrap();
+    let out_byte = code_vec[nibble as usize];
     let nibble = (byte & (7 << 4)) >> 4;
-    let out_byte = out_byte | (*map.get_by_right(&nibble).unwrap() << 4);
-
-    out_byte
-}
-
-fn decode_byte(byte: u8, map: &BiMap<u8, u8>) -> u8 {
-    let nibble = byte & 7;
-    let out_byte = map.get_by_left(&nibble).unwrap();
-    let nibble = (byte & (7 << 4)) >> 4;
-    let out_byte = out_byte | (*map.get_by_left(&nibble).unwrap() << 4);
+    let out_byte = out_byte | (code_vec[nibble as usize] << 4);
 
     out_byte
 }
