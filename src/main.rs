@@ -18,14 +18,14 @@ fn run() {
     let mut output_file = fs::File::create(&format!("{}.constore", input_file_path)).unwrap();
 
     output_file
-        .write_all(&format!("constore{: >32}", "sqrt(157)").into_bytes())
+        .write_all(&format!("constore:{: >32}", "sqrt(157)").into_bytes())
         .unwrap();
 
     let mut output_vec: Vec<u8> = vec![];
 
     for (i, byte) in input_bytes.iter().enumerate() {
         if i % 1_000_000 == 0 {
-            eprintln!("got to {}", i);
+            eprintln!("got to {: >3}mb", i / 1_000_000);
         }
         output_vec.push(code_byte(*byte, &encode_vec));
     }
