@@ -2,6 +2,7 @@ use bimap::BiMap;
 use clap::{App, Arg};
 use rug::Float;
 use std::fs;
+use std::io::Write;
 
 fn run() {
     let cli = App::new("Constore")
@@ -13,12 +14,23 @@ fn run() {
     let input_file_path = cli.value_of("file").unwrap();
 
     let input_bytes = fs::read(input_file_path).unwrap();
+    // println!("{:?}", input_bytes);
 
-    let output_file = fs::File::create(&format!("{}.constore", input_file_path)).unwrap();
+    let mut output_file = fs::File::create(&format!("{}.constore", input_file_path)).unwrap();
 
-    for byte in input_bytes {
-        // write those bytes!
+    output_file
+        .write_all(&format!("constore{: >32}", "sqrt(157)").into_bytes())
+        .unwrap();
+
+    let mut output_vec: Vec<u8> = vec![];
+
+    for (i, byte) in input_bytes.iter().enumerate() {
+        if i % 1_000_000 == 0 {
+            eprintln!("got to {}", i);
+        }
+        output_vec.push(encode_byte(*byte, &byte_map));
     }
+    output_file.write_all(&output_vec).unwrap();
 }
 
 fn main() {
