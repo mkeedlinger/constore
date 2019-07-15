@@ -5,7 +5,10 @@
   "private": true,
   "main": "main.js",
   "scripts": {
-    "start": "electron dist/main.js"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron dist/main.js"
   },
   "keywords": [],
   "author": "",

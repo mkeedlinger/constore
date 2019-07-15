@@ -4,7 +4,7 @@ const { shell } = require('electron');
 
 const selectMunchFile = document.querySelector('#select-munch-file');
 const selectUnmunchFile = document.querySelector('#select-unmunch-file');
-const inputFile = document.querySelector('#munch-input-file');
+const inputFile: HTMLInputElement = document.querySelector('#munch-input-file');
 const munchFilename = document.querySelector('#munch-filename');
 const viewFile = document.querySelector('#view-file');
 
@@ -47,7 +47,7 @@ inputFile.addEventListener('change', () => {
     `../target/release/constore ${
       munchAction === 'munch' ? '-e' : '-d'
     } "${filePath.replace(/"/g, '\\"')}"`,
-    (err, stdout, stderr) => {
+    (err: Error, stdout: string, stderr: string) => {
       munchAction = '';
 
       if (err) {
@@ -67,7 +67,7 @@ viewFile.addEventListener('click', () => {
   shell.openItem(munchFolder);
 });
 
-function changeState(state) {
+function changeState(state: string) {
   document.querySelectorAll('.munch-state').forEach((el) => {
     el.classList.remove('munch-state-visible');
   });

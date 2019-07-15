@@ -17,15 +17,15 @@
       <button id="select-unmunch-file">Unmunch a file</button>
 
       <div class="munch-state munch-state-loading">
-        <h2><span class="action"></span>ing <span id="munch-filename"></span>...</h2>
+        <h2>
+          <span class="action"></span>ing <span id="munch-filename"></span>...
+        </h2>
         <div class="spinner"></div>
       </div>
 
       <div class="munch-state munch-state-success">
         <h2>Successfully <span class="action"></span>ed!</h2>
-        <button id="view-file">
-          View <span class="action"></span>ed file
-        </button>
+        <button id="view-file">View <span class="action"></span>ed file</button>
       </div>
 
       <div class="munch-state munch-state-failure">
@@ -33,6 +33,9 @@
       </div>
     </div>
 
-    <script src="dist/renderer.js"></script>
+    <script>
+      // You can also require other files to run in this process
+      require('./dist/renderer.js');
+    </script>
   </body>
 </html>
